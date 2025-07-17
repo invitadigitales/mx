@@ -1,0 +1,518 @@
+
+/* ===========================================
+   RESET Y CONFIGURACIÓN BASE
+=========================================== */
+html {
+    width: 100%;
+    height: 100%; 
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1E191A;
+    color: white;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===========================================
+   CLASES DE FUENTES REUTILIZABLES
+=========================================== */
+.font_satisfy {
+    font-family: "Satisfy", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.font_urbanist {
+    font-family: "Urbanist", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.font_fira_sans {
+    font-family: "Fira Sans Condensed", serif;
+}
+
+.font_charm {
+    font-family: "Charm", cursive;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.font_chewy {
+    font-family: "Chewy", system-ui;
+    font-style: normal;
+}
+
+.font_playwrite {
+    font-family: "Playwrite TZ", cursive;
+    font-weight: 700;
+}
+
+.font_times {
+    font-family: "Times New Roman";
+}
+
+/* ===========================================
+   TAMAÑOS TIPOGRÁFICOS RESPONSIVOS PERSONALIZADOS
+=========================================== */
+.text_custom_large {
+    font-size: 24px;
+}
+
+.text-custom-xxlarge {
+    font-size: 28px;
+}
+
+@media (min-width: 576px) {
+    .text_custom_large {
+        font-size: 30px;
+    }
+    
+    .text-custom-xxlarge {
+        font-size: 35px;
+    }
+}
+
+@media (min-width: 768px) {
+    .text_custom_large {
+        font-size: 35px;
+    }
+    
+    .text-custom-xxlarge {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 992px) {
+    .text_custom_large {
+        font-size: 40px;
+    }
+    
+    .text-custom-xxlarge {
+        font-size: 45px;
+    }
+}
+
+/* ===========================================
+   CLASES DE EFECTOS Y UTILIDADES
+=========================================== */
+.img-responsive {
+    width: 100%;
+    height: auto;
+}
+
+.gradient-up {
+    background: linear-gradient(to bottom, transparent, white);
+    opacity: 0.1;
+}
+
+.gradient-down {
+    background: linear-gradient(to bottom, white, transparent);
+    opacity: 0.1;
+}
+
+.img-inverse-v {
+    transform: rotateX(180deg);
+    transform-origin: center;
+}
+
+.text-shadow {
+    text-shadow: 0px 0px 10px rgba(242.69376544944362, 242.69376544944362, 242.69376544944362, 0.88);
+}
+
+.text-gold-gradient {
+    background: linear-gradient(139deg,
+        rgba(181, 160, 42, 1) 0%,
+        rgba(199, 188, 87, 1) 11%,
+        rgba(255, 232, 156, 1) 18%,
+        rgba(237, 234, 83, 1) 23%,
+        rgba(237, 165, 83, 1) 34%,
+        rgba(237, 196, 62, 1) 42%,
+        rgba(237, 204, 83, 1) 50%,
+        rgba(255, 240, 184, 1) 54%,
+        rgba(255, 217, 184, 1) 61%,
+        rgba(255, 211, 66, 1) 68%,
+        rgba(255, 246, 204, 1) 78%,
+        rgba(255, 189, 66, 1) 88%,
+        rgba(222, 165, 60, 1) 98%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 2px 1px 1px rgba(45, 28, 0, 0.34);
+}
+
+.shadow-box {
+    box-shadow: rgba(247, 247, 247, 0.98) -1px 0px 10px 0px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: rgb(233, 233, 233);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.display-inline-block {
+    display: inline-block;
+}
+
+/* ===========================================
+   COMPONENTES ESPECÍFICOS
+=========================================== */
+.content {
+    background: #000000;
+    width: 100%;
+    display: block;
+    margin: 0 auto;
+    max-width: 800px;
+    position: relative; /* Añadido para contener el botón de WhatsApp */
+}
+
+.btn-border {
+    border: 1px solid black;
+    color: black;
+    background: transparent;
+    border-radius: 70px;
+    padding: 12px 60px;
+    align-items: center;
+    text-decoration: none;
+    gap: 5px;
+    display: inline-flex;
+}
+
+.btn-border i {
+    color: black;
+}
+
+.max-width-200 {
+    width: 100%;
+    max-width: 200px;
+}
+
+/* ===========================================
+   ANIMACIONES
+=========================================== */
+.star-animation {
+    position: absolute;
+    background-image: url('estrella.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 1;
+    pointer-events: none;
+    animation: pulso 5s infinite, desaparecer 0.5s ease-out forwards;
+}
+
+@keyframes pulso {
+    0% { transform: scale(1); opacity: 1; }
+    10% { transform: scale(2); opacity: 1; }
+}
+
+@keyframes desaparecer {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+/* ===========================================
+   HEADER Y NAVEGACIÓN
+=========================================== */
+.header-fixed {
+    position: fixed;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+}
+
+.header-brand {
+    position: relative;
+    background: linear-gradient(139deg, rgba(181, 160, 42, 1) 0%, rgba(199, 188, 87, 1) 11%, rgba(255, 232, 156, 1) 18%, rgba(237, 234, 83, 1) 23%, rgba(237, 165, 83, 1) 34%, rgba(237, 196, 62, 1) 42%, rgba(237, 204, 83, 1) 50%, rgba(255, 240, 184, 1) 54%, rgba(255, 217, 184, 1) 61%, rgba(255, 211, 66, 1) 68%, rgba(255, 246, 204, 1) 78%, rgba(255, 189, 66, 1) 88%, rgba(222, 165, 60, 1) 98%);
+    display: inline-block;
+    margin: 0 auto;
+    padding: 10px 20px 20px 20px;
+    border-radius: 0px 0px 20px 20px;
+    filter: drop-shadow(0 0 5px rgb(0, 0, 0));
+    z-index: 1;
+}
+
+.header-brand::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 99%;
+    height: 82px;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 66%), #00000000);
+    z-index: 2;
+    pointer-events: none;
+    filter: blur(8px);
+    border-radius: 0px 0px 20px 20px;
+}
+
+.header-brand a {
+    text-decoration: none;
+    color: black;
+}
+
+/* ===========================================
+   TÍTULOS PRINCIPALES
+=========================================== */
+.main-title {
+    position: static;
+    bottom: 480px;
+    margin-left: 15px;
+    height: 0px;
+    filter: drop-shadow(0 0 5px rgb(0, 0, 0));
+}
+
+.main-title p {
+    margin: 0px;
+    padding: 0px;
+}
+
+.main-title .title-primary {
+    position: relative;
+    bottom: -195px;
+    font-size: 38px !important;
+}
+
+.main-title .title-secondary {
+    position: relative;
+    font-size: 57px !important;
+    bottom: -161px;
+}
+
+/* ===========================================
+   SECCIÓN DE IMAGEN Y TEXTO
+=========================================== */
+.image-section {
+    width: 100%;
+}
+
+.decorative-image {
+    width: 80px;
+    height: auto;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* Responsive adjustments for decorative image */
+@media (max-width: 576px) {
+    .decorative-image {
+        width: 60px;
+        margin-left: 5px;
+    }
+}
+
+@media (min-width: 768px) {
+    .decorative-image {
+        width: 98px;
+        margin-left: 15px;
+    }
+}
+
+/* ===========================================
+   SLIDER/CAROUSEL
+=========================================== */
+.carousel-container {
+    padding: 0px 10px;
+}
+
+.carousel-container .splide__slide {
+    padding: 40px 10px 40px 10px;
+}
+
+/* ===========================================
+   IMÁGENES DE FONDO
+=========================================== */
+.background-image {
+    position: absolute;
+    width: 70%;
+    height: 100vh;
+    top: 0;
+    object-fit: fill;
+    z-index: -1;
+    transition: transform 1s ease-out;
+}
+
+.background-image.left {
+    left: 0;
+}
+
+.background-image.right {
+    right: 0;
+}
+
+.hide-left {
+    transform: translateX(-100%);
+}
+
+.hide-right {
+    transform: translateX(100%);
+}
+
+.centered-image {
+    max-height: 30%;
+    cursor: pointer;
+}
+
+/* ===========================================
+   FOOTER
+=========================================== */
+
+.footer-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.footer-links {
+    margin: 0px 10px;
+}
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    font-size: 18px;
+    text-decoration: none;
+    color: white;
+}
+
+
+
+
+
+
+/* ===========================================
+   WHATSAPP BUTTON - CONTAINED VERSION
+=========================================== */
+.whatsapp-float {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -360px; /* La mitad del max-width del contenedor (800px / 2 = 400px) menos 40px */
+    background-color: #25d366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    animation: pulse_wats 2s infinite;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-icon {
+    width: 80px;
+    height: 80px;
+}
+
+@keyframes pulse_wats {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* ===========================================
+   RESPONSIVE DESIGN
+=========================================== */
+@media (min-width: 300px) {
+    .main-title .title-primary {
+        bottom: -228px;
+        font-size: 44px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 63px !important;
+        bottom: -192px;
+    }
+}
+
+@media (min-width: 350px) {
+    .main-title .title-primary {
+        bottom: -265px;
+        font-size: 51px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 76px !important;
+        bottom: -220px;
+    }
+}
+
+@media (min-width: 430px) {
+    .main-title .title-primary {
+        bottom: -287px;
+        font-size: 66px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 103px !important;
+        bottom: -224px;
+    }
+    .header-brand a {
+        font-size: 25px;
+    }
+}
+
+@media (min-width: 510px) {
+    .main-title .title-primary {
+        bottom: -346px;
+        font-size: 85px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 128px !important;
+        bottom: -266px;
+    }
+    .header-brand a {
+        font-size: 30px;
+    }
+}
+
+@media (min-width: 630px) {
+    .main-title .title-primary {
+        bottom: -435px;
+        font-size: 100px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 157px !important;
+        bottom: -337px;
+    }
+}
+
+@media (min-width: 770px) {
+    .main-title .title-primary {
+        bottom: -503px;
+        font-size: 126px !important;
+    }
+    .main-title .title-secondary {
+        font-size: 189px !important;
+        bottom: -387px;
+    }
+}

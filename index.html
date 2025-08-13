@@ -76,22 +76,73 @@
 
 
         <!-- Carousel de imágenes -->
-        <section class="splide carousel-container">
+        <section class="uno splide carousel-container">
             <div class="splide__track">
                 <ul class="splide__list">
-                    <a class="splide__slide" href="https://invitadigitales.github.io/DianaLizeth/">
-                        <img src="1.webp" class="img-responsive filter-instagram-aden">
+
+
+                    <a class="splide__slide" href="https://invitadigitales.github.io/HeidyXadany/">
+                        <img src="4.png" class="img-responsive">
+                    </a>
+
+                    <a class="splide__slide" href="https://invitadigitales.github.io/ArelyMarquez/">
+                        <img src="3.png"  class="img-responsive">
                     </a>
                     <a class="splide__slide" href="https://invitadigitales.github.io/YoselinMiranda/">
                         <img src="2.webp" class="img-responsive">
                     </a>
-                    <a class="splide__slide"><img src="3.png"  class="img-responsive filter-gray-100"></a>
-                    <a class="splide__slide"><img src="4.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide" href="https://invitadigitales.github.io/DianaLizeth/">
+                        <img src="1.webp" class="img-responsive filter-instagram-aden">
+                    </a>
+
+                    
+                    
                     <a class="splide__slide"><img src="5.png"  class="img-responsive filter-gray-100"></a>
                     <a class="splide__slide"><img src="6.png"  class="img-responsive filter-gray-100"></a>
                 </ul>
             </div>
         </section>
+
+
+
+
+
+        <!-- Sección de imagen decorativa -->
+        <br><br><br>
+        <div class="image-section">
+            <div class="container-fluid px-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="font_chewy text-center fz-2 fz-lg-1">
+                            Para ese día tan especial y  <br> esperado en tu vida
+                            <img src="anillos.png" class="decorative-image">
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Carousel de imágenes -->
+        <section class="dos splide carousel-container">
+            <div class="splide__track">
+                <ul class="splide__list">
+
+
+                    <a class="splide__slide" href="https://invitadigitales.github.io/AlejandroLeticia/">
+                        <img src="7.png" class="img-responsive">
+                    </a>
+                    
+                    <a class="splide__slide"><img src="8.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="9.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="10.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="11.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="12.png"  class="img-responsive filter-gray-100"></a>
+                </ul>
+            </div>
+        </section>
+
+
 
 
 
@@ -165,12 +216,23 @@
          * Configuración del slider/carousel
          */
         function initializeSlider() {
-            new Splide('.splide', {
+
+            new Splide('.uno', {
                 type: 'loop',
                 perPage: 2,
                 autoplay: true,
                 interval: 3000
             }).mount();
+
+            new Splide('.dos', {
+                type: 'loop',
+                perPage: 2,
+                autoplay: true,
+                interval: 3000
+            }).mount();
+
+
+
         }
 
         /**

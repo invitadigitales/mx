@@ -60,6 +60,9 @@
         </center>
         <br><br>
 
+
+
+
         <!-- Sección de imagen decorativa -->
         <div class="image-section">
             <div class="container-fluid px-3">
@@ -73,44 +76,34 @@
                 </div>
             </div>
         </div>
-
-
         <!-- Carousel de imágenes -->
         <section class="uno splide carousel-container">
             <div class="splide__track">
                 <ul class="splide__list">
-
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/AnaLuz/">
                         <img src="1.png" class="img-responsive filter-instagram-aden">
                     </a>
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/BrendaGarcia/">
                         <img src="5.png" class="img-responsive">
                     </a>
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/ArelyMarquez/">
                         <img src="6.png"  class="img-responsive">
                     </a>
-
-
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/HeidyXadany/">
                         <img src="4.png" class="img-responsive">
                     </a>
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/ArelyMarquez/">
                         <img src="3.png"  class="img-responsive">
                     </a>
                     <a class="splide__slide" href="https://invitadigitales.github.io/YoselinMiranda/">
                         <img src="2.webp" class="img-responsive">
                     </a>
-
-                    
-
                 </ul>
             </div>
         </section>
+
+
+
 
 
 
@@ -130,22 +123,16 @@
                 </div>
             </div>
         </div>
-
-
         <!-- Carousel de imágenes -->
         <section class="dos splide carousel-container">
             <div class="splide__track">
                 <ul class="splide__list">
-
-
                     <a class="splide__slide" href="https://invitadigitales.github.io/AlejandroLeticia/">
                         <img src="7.png" class="img-responsive">
                     </a>
                     <a class="splide__slide" href="https://invitadigitales.github.io/JorgeAlejandra/">
                         <img src="8.png" class="img-responsive">
                     </a>
-                    
-      
                     <a class="splide__slide"><img src="9.png"  class="img-responsive filter-gray-100"></a>
                     <a class="splide__slide"><img src="10.png"  class="img-responsive filter-gray-100"></a>
                     <a class="splide__slide"><img src="11.png"  class="img-responsive filter-gray-100"></a>
@@ -153,6 +140,54 @@
                 </ul>
             </div>
         </section>
+
+
+
+
+
+
+        <!-- Sección de imagen decorativa -->
+        <br><br><br>
+        <div class="image-section">
+            <div class="container-fluid px-3">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="font_chewy text-center fz-2 fz-lg-1">
+                            Un momento especial para <br> recibir la gracia de Dios
+                            <img src="paloma.png" class="decorative-image">
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Carousel de imágenes -->
+        <section class="tres splide carousel-container">
+            <div class="splide__track">
+                <ul class="splide__list">
+
+
+                    <a class="splide__slide" href="https://invitadigitales.github.io/Sarahi_Ismael/">
+                        <img src="13.png" class="img-responsive">
+                    </a>
+                    <a class="splide__slide"><img src="14.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="15.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="16.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="17.png"  class="img-responsive filter-gray-100"></a>
+                    <a class="splide__slide"><img src="18.png"  class="img-responsive filter-gray-100"></a>
+                </ul>
+            </div>
+        </section>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -238,6 +273,13 @@
             }).mount();
 
             new Splide('.dos', {
+                type: 'loop',
+                perPage: 2,
+                autoplay: true,
+                interval: 3000
+            }).mount();
+
+            new Splide('.tres', {
                 type: 'loop',
                 perPage: 2,
                 autoplay: true,

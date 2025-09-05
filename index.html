@@ -543,38 +543,6 @@
 
 
 
-async function enviarMensaje(mensaje) {
-  try {
-    const response = await fetch("https://huggingface.co/spaces/bocekme/api3/api/predict/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: mensaje,
-        history: [],               // historial vacío si quieres
-        system_message: "Eres un vendedor experto en invitaciones digitales...",
-        max_tokens: 512,
-        temperature: 0.7,
-        top_p: 0.95
-      })
-    });
-
-    const data = await response.json();
-    console.log("Respuesta del chat:", data.response);
-    return data.response;
-  } catch (err) {
-    console.error("Error al llamar a la API:", err);
-  }
-}
-
-// Uso
-enviarMensaje("Hola, quiero ver invitaciones para cumpleaños");
-
-
-
-
-
 
 
     </script>

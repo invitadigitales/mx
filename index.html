@@ -536,6 +536,47 @@
 
         // Listener para cambios de tamaño de pantalla
         window.addEventListener('resize', ResponsiveConfig.onResize.bind(ResponsiveConfig));
+
+
+
+
+
+
+
+
+async function enviarMensaje(mensaje) {
+  const response = await fetch("https://huggingface.co/spaces/bocekme/01/api/predict/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      data: [
+        mensaje,
+        "", // Historial vacío
+        "Eres un vendedor experto en invitaciones digitales...",
+        512, // max_tokens
+        0.7, // temperature
+        0.95 // top_p
+      ]
+    })
+  });
+
+  const result = await response.json();
+  console.log(result); // Aquí obtienes la respuesta del chatbot
+}
+
+enviarMensaje("Hola, quiero ver invitaciones para cumpleaños");
+
+
+
+
+
+
+
+
+
+        
     </script>
 </body>
 </html>

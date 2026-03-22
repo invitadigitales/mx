@@ -14,11 +14,8 @@
     import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
 
     const VAPID_PUBLICA = "BC6hiqUK0HIscbGSOQIO4BU5jvh4InOfaLyzstx1PkFh-_1DJ5eW3x971OXPfGVUI0EpsqafOCVKClcD47w5Bt0";
+    const PHP_URL = "https://test.ztart.mx/guardar-suscripcion.php";
 
-    // URL de tu servidor PHP (cámbiala por la tuya)
-    const PHP_URL = "https://test.ztart.mx/";
-
-    // ─── Convertir VAPID key a Uint8Array ────────────────────────────────────────
     function urlBase64ToUint8Array(base64String) {
       const padding = "=".repeat((4 - base64String.length % 4) % 4);
       const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -26,7 +23,6 @@
       return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
     }
 
-    // ─── Registrar SW y suscribir al usuario ─────────────────────────────────────
     async function suscribir() {
       if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
         alert("Tu navegador no soporta notificaciones push");
@@ -39,7 +35,7 @@
         return;
       }
 
-      const reg = await navigator.serviceWorker.register("/mx/Sw.js");
+      const reg = await navigator.serviceWorker.register("/mx/sw.js");
       await navigator.serviceWorker.ready;
 
       const suscripcion = await reg.pushManager.subscribe({
@@ -47,21 +43,30 @@
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLICA)
       });
 
-      // Enviar suscripción al servidor PHP
-      await fetch(PHP_URL, {
+      // Convertir a objeto plano para mandarlo como JSON
+      const suscripcionJSON = JSON.parse(JSON.stringify(suscripcion));
+
+      console.log("Suscripción generada:", suscripcionJSON);
+
+      const resp = await fetch(PHP_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(suscripcion)
+        body: JSON.stringify(suscripcionJSON)
       });
 
-      document.getElementById("estado").textContent = "✅ Notificaciones activas";
-      document.getElementById("btnPermiso").textContent = "✅ Activadas";
+      const resultado = await resp.json();
+      console.log("Respuesta PHP:", resultado);
+
+      if (resultado.ok) {
+        document.getElementById("estado").textContent = "✅ Notificaciones activas";
+        document.getElementById("btnPermiso").textContent = "✅ Activadas";
+      } else {
+        document.getElementById("estado").textContent = "Error: " + JSON.stringify(resultado);
+      }
     }
 
     document.getElementById("btnPermiso").addEventListener("click", suscribir);
-
-    document.getElementById("estado").textContent =
-      "Permiso actual: " + Notification.permission;
+    document.getElementById("estado").textContent = "Permiso actual: " + Notification.permission;
 
     // ─── Apinator WebSocket ──────────────────────────────────────────────────────
     const client = new Apinator({
@@ -74,8 +79,6 @@
 
     channel.bind("chat", (data) => {
       console.log("Mensaje recibido:", data);
-      // El push ya lo manda tu PHP cuando llega el mensaje
-      // Esto es solo para cuando la app está abierta:
       if (Notification.permission === "granted") {
         navigator.serviceWorker.ready.then(sw => {
           sw.showNotification("💬 Nuevo mensaje", {

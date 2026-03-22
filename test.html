@@ -39,7 +39,7 @@
         return;
       }
 
-      const reg = await navigator.serviceWorker.register("/mx/sw.js");
+      const reg = await navigator.serviceWorker.register("/mx/Sw.js");
       await navigator.serviceWorker.ready;
 
       const suscripcion = await reg.pushManager.subscribe({

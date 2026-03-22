@@ -10,25 +10,31 @@
   <button id="btnPermiso">🔔 Activar notificaciones</button>
   <p id="estado"></p>
 
+  <script>
+    // ─── Si se carga como Service Worker, responder como SW y parar ─────────────
+    if (typeof importScripts === "function") {
+      // Estamos corriendo como SW
+      self.addEventListener("notificationclick", (event) => {
+        event.notification.close();
+        event.waitUntil(clients.openWindow("/"));
+      });
+      // No ejecutar nada más
+      throw new Error("SW loaded"); // detiene el resto del script en contexto SW
+    }
+  </script>
+
   <script type="module">
     import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
 
-    // ─── 1. Registrar Service Worker desde un Blob (sin archivo externo) ────────
+    // ─── 1. Registrar el mismo archivo HTML como Service Worker ─────────────────
     async function registrarSW() {
       if (!("serviceWorker" in navigator)) return;
-
-      const swCode = `
-        self.addEventListener("notificationclick", (event) => {
-          event.notification.close();
-          event.waitUntil(clients.openWindow("/"));
-        });
-      `;
-
-      const blob = new Blob([swCode], { type: "application/javascript" });
-      const swURL = URL.createObjectURL(blob);
-
       try {
-        await navigator.serviceWorker.register(swURL, { type: "classic" });
+        // Registramos este mismo archivo con ?sw para que el SW lo detecte
+        await navigator.serviceWorker.register(
+          location.pathname + "?sw",
+          { scope: "/" }
+        );
         console.log("Service Worker registrado ✅");
       } catch (e) {
         console.warn("SW falló:", e);
@@ -45,17 +51,12 @@
     // ─── 3. Mostrar notificación ─────────────────────────────────────────────────
     async function mostrarNotificacion(titulo, cuerpo) {
       if (Notification.permission !== "granted") return;
-
-      if ("serviceWorker" in navigator) {
-        const sw = await navigator.serviceWorker.ready;
-        sw.showNotification(titulo, {
-          body: cuerpo,
-          vibrate: [200, 100, 200],
-          tag: "mensaje-chat",
-        });
-      } else {
-        new Notification(titulo, { body: cuerpo });
-      }
+      const sw = await navigator.serviceWorker.ready;
+      sw.showNotification(titulo, {
+        body: cuerpo,
+        vibrate: [200, 100, 200],
+        tag: "mensaje-chat",
+      });
     }
 
     // ─── 4. Inicializar ──────────────────────────────────────────────────────────
@@ -82,7 +83,6 @@
 
     channel.bind("chat", async (data) => {
       console.log("Mensaje recibido:", data);
-
       await mostrarNotificacion(
         "💬 Nuevo mensaje",
         data.texto ?? data.message ?? JSON.stringify(data)

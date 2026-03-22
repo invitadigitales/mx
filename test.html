@@ -1,0 +1,15 @@
+<script type="module">
+import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
+
+const client = new Apinator({
+  appKey: "app_be4549e6156c932f58ec480ec0e6b06fa3284762",
+  cluster: "us"
+});
+
+const connection = client.connect();
+const channel = connection.subscribe("chat");
+
+channel.bind("mensaje", (data) => {
+  console.log(data);
+});
+</script>

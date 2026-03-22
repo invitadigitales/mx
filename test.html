@@ -13,49 +13,57 @@
   <script type="module">
     import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
 
-    // ─── 1. Registrar sw.js ──────────────────────────────────────────────────────
-    async function registrarSW() {
-      if (!("serviceWorker" in navigator)) return;
-      try {
-        await navigator.serviceWorker.register("/mx/Sw.js");
-        console.log("SW registrado ✅");
-      } catch (e) {
-        console.warn("SW falló:", e);
+    const VAPID_PUBLICA = "BC6hiqUK0HIscbGSOQIO4BU5jvh4InOfaLyzstx1PkFh-_1DJ5eW3x971OXPfGVUI0EpsqafOCVKClcD47w5Bt0";
+
+    // URL de tu servidor PHP (cámbiala por la tuya)
+    const PHP_URL = "https://tuservidor.com/guardar-suscripcion.php";
+
+    // ─── Convertir VAPID key a Uint8Array ────────────────────────────────────────
+    function urlBase64ToUint8Array(base64String) {
+      const padding = "=".repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+      const rawData = atob(base64);
+      return Uint8Array.from([...rawData].map(c => c.charCodeAt(0)));
+    }
+
+    // ─── Registrar SW y suscribir al usuario ─────────────────────────────────────
+    async function suscribir() {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        alert("Tu navegador no soporta notificaciones push");
+        return;
       }
-    }
 
-    // ─── 2. Pedir permiso ────────────────────────────────────────────────────────
-    async function pedirPermiso() {
       const permiso = await Notification.requestPermission();
-      document.getElementById("estado").textContent = "Permiso: " + permiso;
-      return permiso;
-    }
+      if (permiso !== "granted") {
+        document.getElementById("estado").textContent = "Permiso denegado";
+        return;
+      }
 
-    // ─── 3. Mostrar notificación ─────────────────────────────────────────────────
-    async function mostrarNotificacion(titulo, cuerpo) {
-      if (Notification.permission !== "granted") return;
-      const sw = await navigator.serviceWorker.ready;
-      sw.showNotification(titulo, {
-        body: cuerpo,
-        vibrate: [200, 100, 200],
-        tag: "mensaje-chat",
+      const reg = await navigator.serviceWorker.register("/mx/sw.js");
+      await navigator.serviceWorker.ready;
+
+      const suscripcion = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLICA)
       });
+
+      // Enviar suscripción al servidor PHP
+      await fetch(PHP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(suscripcion)
+      });
+
+      document.getElementById("estado").textContent = "✅ Notificaciones activas";
+      document.getElementById("btnPermiso").textContent = "✅ Activadas";
     }
 
-    // ─── 4. Inicializar ──────────────────────────────────────────────────────────
-    await registrarSW();
+    document.getElementById("btnPermiso").addEventListener("click", suscribir);
 
     document.getElementById("estado").textContent =
-      "Permiso: " + Notification.permission;
+      "Permiso actual: " + Notification.permission;
 
-    document.getElementById("btnPermiso").addEventListener("click", async () => {
-      const permiso = await pedirPermiso();
-      if (permiso === "granted") {
-        document.getElementById("btnPermiso").textContent = "✅ Notificaciones activas";
-      }
-    });
-
-    // ─── 5. Apinator WebSocket → notificación ───────────────────────────────────
+    // ─── Apinator WebSocket ──────────────────────────────────────────────────────
     const client = new Apinator({
       appKey: "app_be4549e6156c932f58ec480ec0e6b06fa3284762",
       cluster: "us"
@@ -64,12 +72,19 @@
     const connection = client.connect();
     const channel = connection.subscribe("mensaje");
 
-    channel.bind("chat", async (data) => {
+    channel.bind("chat", (data) => {
       console.log("Mensaje recibido:", data);
-      await mostrarNotificacion(
-        "💬 Nuevo mensaje",
-        data.texto ?? data.message ?? JSON.stringify(data)
-      );
+      // El push ya lo manda tu PHP cuando llega el mensaje
+      // Esto es solo para cuando la app está abierta:
+      if (Notification.permission === "granted") {
+        navigator.serviceWorker.ready.then(sw => {
+          sw.showNotification("💬 Nuevo mensaje", {
+            body: data.texto ?? data.message ?? JSON.stringify(data),
+            vibrate: [200, 100, 200],
+            tag: "mensaje-chat"
+          });
+        });
+      }
     });
   </script>
 

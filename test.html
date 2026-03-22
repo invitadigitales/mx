@@ -7,9 +7,9 @@ const client = new Apinator({
 });
 
 const connection = client.connect();
-const channel = connection.subscribe("chat");
+const channel = connection.subscribe("mensaje");
 
-channel.bind("mensaje", (data) => {
+channel.bind("chat", (data) => {
   console.log(data);
 });
 </script>

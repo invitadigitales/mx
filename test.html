@@ -10,32 +10,15 @@
   <button id="btnPermiso">🔔 Activar notificaciones</button>
   <p id="estado"></p>
 
-  <script>
-    // ─── Si se carga como Service Worker, responder como SW y parar ─────────────
-    if (typeof importScripts === "function") {
-      // Estamos corriendo como SW
-      self.addEventListener("notificationclick", (event) => {
-        event.notification.close();
-        event.waitUntil(clients.openWindow("/"));
-      });
-      // No ejecutar nada más
-      throw new Error("SW loaded"); // detiene el resto del script en contexto SW
-    }
-  </script>
-
   <script type="module">
     import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
 
-    // ─── 1. Registrar el mismo archivo HTML como Service Worker ─────────────────
+    // ─── 1. Registrar sw.js ──────────────────────────────────────────────────────
     async function registrarSW() {
       if (!("serviceWorker" in navigator)) return;
       try {
-        // Registramos este mismo archivo con ?sw para que el SW lo detecte
-        await navigator.serviceWorker.register(
-          location.pathname + "?sw",
-          { scope: "/" }
-        );
-        console.log("Service Worker registrado ✅");
+        await navigator.serviceWorker.register("/sw.js");
+        console.log("SW registrado ✅");
       } catch (e) {
         console.warn("SW falló:", e);
       }

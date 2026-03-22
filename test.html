@@ -1,15 +1,94 @@
-<script type="module">
-import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificaciones</title>
+</head>
+<body>
 
-const client = new Apinator({
-  appKey: "app_be4549e6156c932f58ec480ec0e6b06fa3284762",
-  cluster: "us"
-});
+  <button id="btnPermiso">🔔 Activar notificaciones</button>
+  <p id="estado"></p>
 
-const connection = client.connect();
-const channel = connection.subscribe("mensaje");
+  <script type="module">
+    import { Apinator } from "https://cdn.jsdelivr.net/npm/@apinator/client/+esm";
 
-channel.bind("chat", (data) => {
-  console.log(data);
-});
-</script>
+    // ─── 1. Registrar Service Worker desde un Blob (sin archivo externo) ────────
+    async function registrarSW() {
+      if (!("serviceWorker" in navigator)) return;
+
+      const swCode = `
+        self.addEventListener("notificationclick", (event) => {
+          event.notification.close();
+          event.waitUntil(clients.openWindow("/"));
+        });
+      `;
+
+      const blob = new Blob([swCode], { type: "application/javascript" });
+      const swURL = URL.createObjectURL(blob);
+
+      try {
+        await navigator.serviceWorker.register(swURL, { type: "classic" });
+        console.log("Service Worker registrado ✅");
+      } catch (e) {
+        console.warn("SW falló:", e);
+      }
+    }
+
+    // ─── 2. Pedir permiso ────────────────────────────────────────────────────────
+    async function pedirPermiso() {
+      const permiso = await Notification.requestPermission();
+      document.getElementById("estado").textContent = "Permiso: " + permiso;
+      return permiso;
+    }
+
+    // ─── 3. Mostrar notificación ─────────────────────────────────────────────────
+    async function mostrarNotificacion(titulo, cuerpo) {
+      if (Notification.permission !== "granted") return;
+
+      if ("serviceWorker" in navigator) {
+        const sw = await navigator.serviceWorker.ready;
+        sw.showNotification(titulo, {
+          body: cuerpo,
+          vibrate: [200, 100, 200],
+          tag: "mensaje-chat",
+        });
+      } else {
+        new Notification(titulo, { body: cuerpo });
+      }
+    }
+
+    // ─── 4. Inicializar ──────────────────────────────────────────────────────────
+    await registrarSW();
+
+    document.getElementById("estado").textContent =
+      "Permiso: " + Notification.permission;
+
+    document.getElementById("btnPermiso").addEventListener("click", async () => {
+      const permiso = await pedirPermiso();
+      if (permiso === "granted") {
+        document.getElementById("btnPermiso").textContent = "✅ Notificaciones activas";
+      }
+    });
+
+    // ─── 5. Apinator WebSocket → notificación ───────────────────────────────────
+    const client = new Apinator({
+      appKey: "app_be4549e6156c932f58ec480ec0e6b06fa3284762",
+      cluster: "us"
+    });
+
+    const connection = client.connect();
+    const channel = connection.subscribe("mensaje");
+
+    channel.bind("chat", async (data) => {
+      console.log("Mensaje recibido:", data);
+
+      await mostrarNotificacion(
+        "💬 Nuevo mensaje",
+        data.texto ?? data.message ?? JSON.stringify(data)
+      );
+    });
+  </script>
+
+</body>
+</html>

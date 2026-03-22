@@ -4,7 +4,7 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(data.titulo, {
       body: data.cuerpo,
       vibrate: [200, 100, 200],
-      tag: "mensaje-chat"
+      tag: "mensaje-" + Date.now()
     })
   );
 });
